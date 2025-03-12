@@ -79,6 +79,7 @@ def main():
                     new_tags.append(tag_name)
             except Exception as e:
                 print(f"Error processing tag {tag_name}: {e}")
+        new_tags.append("v0.67.0") # DEBUG purposes, TODO remove
     else:
         # Get all new tags that aren't already in the issue
         new_tags = []
