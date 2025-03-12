@@ -6,6 +6,7 @@ import datetime
 
 def main():
     github_token = os.environ["GITHUB_TOKEN"]
+    workflow_path = os.environ["WORKFLOW_PATH"]
     issue_title = os.environ["ISSUE_TITLE"]
     source_repo_name = os.environ["SOURCE_REPO"]
     action_repo_name = os.environ["ACTION_REPO"]
@@ -51,15 +52,12 @@ def main():
         
         # Try to get the last workflow run time
         try:
-            workflow_runs = action_repo.get_workflow_runs(
-                workflow_name="Track Dirty-Waters Tags",
-                status="success"
-            )
-            if workflow_runs.totalCount > 0:
-                # Get the most recent successful run
-                last_run = workflow_runs[0]
-                last_run_time = last_run.created_at
-                print(f"Last successful workflow run was at: {last_run_time}")
+            workflow_runs = action_repo.get_workflow_runs()
+            for run in workflow_runs:
+                if run.name == workflow_path:
+                    last_run_time = run.created_at
+                    break
+            print(f"Last successful workflow run was at: {last_run_time}")
         except Exception as e:
             print(f"Error getting last workflow run time: {e}")
             print("Using default time period of 24 hours")
