@@ -79,7 +79,6 @@ def main():
                     new_tags.append(f"[{tag_name}]({tag.commit.html_url})")
             except Exception as e:
                 print(f"Error processing tag {tag_name}: {e}")
-        new_tags.append("v0.67.0") # DEBUG purposes, TODO remove
     else:
         # Get all new tags that aren't already in the issue
         new_tags = []
@@ -89,17 +88,19 @@ def main():
                 tag_name not in already_processed_tags and
                 tag_name.startswith('v')  # Only consider version tags
             ):
-                new_tags.append(tag_name)
+                new_tags.append(f"[{tag_name}]({tag.commit.html_url})")
     
     # If there are new tags, update the issue
     if new_tags:
         # Build the list of all unchecked tags (both existing and new)
         combined_unchecked = already_processed_tags + new_tags
+        print(f"Found {len(new_tags)} new tags to process")
         count = len(combined_unchecked)
         plural = "s" if count > 1 else ""
         
         new_body = f"# Check Dirty-Waters Updates\n`dirty-waters` has {count} new tag{plural} with updates to be attended to:\n"
         for tag in combined_unchecked:
+            print(f"Adding tag: {tag}")
             new_body += f"- [ ] {tag}\n"
         
         # Update the issue body
