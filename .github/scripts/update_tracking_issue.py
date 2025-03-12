@@ -76,7 +76,7 @@ def main():
                     tag_name not in already_processed_tags and
                     tag_name.startswith('v')  # Only consider version tags
                 ):
-                    new_tags.append(tag_name)
+                    new_tags.append(f"[{tag_name}]({tag.commit.html_url})")
             except Exception as e:
                 print(f"Error processing tag {tag_name}: {e}")
         new_tags.append("v0.67.0") # DEBUG purposes, TODO remove
